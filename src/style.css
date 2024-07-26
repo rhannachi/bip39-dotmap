@@ -31,4 +31,7 @@ body {
     display: flex;
     justify-content: space-around;
   }
-  
+  input#word {
+    font-weight: bold;
+      text-align: center;
+  }
