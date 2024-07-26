@@ -1,4 +1,4 @@
-const { bip39DotMap } = require('./bip39_dotmap');
+import { bip39DotMap } from './bip39_dotmap'
 
 const BIP39_DOTMAP = (function () {
     // Split the input into rows
