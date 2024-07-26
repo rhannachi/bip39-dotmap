@@ -1,5 +1,4 @@
 # bip39-dotmap
-bip39-dotmap
 
 Turn BIP39 words into dotmap. Use 12 dots per word to record your mnemonic phrase.
 
