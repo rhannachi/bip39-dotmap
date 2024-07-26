@@ -1,19 +1,23 @@
 # bip39-dotmap
 
-Turn BIP39 words into dotmap. Use 12 dots per word to record your mnemonic phrase.
+![bip39_dotmap_img](./img.png)
+
+**Turn BIP39 words into dotmap. Use 12 dots per word to record your mnemonic phrase.**
 
 12 dots represent:
 2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1
 
 For instance:
 
-#63 amazing = 32, 16, 8, 4, 2, 1
+_#63_ => **amazing** = **32, 16, 8, 4, 2, 1**
 
-| ○○○○ | ○○●● | ●●●● |
+`| ○○○○ | ○○●● | ●●●● |
+`
 
-#977 key = 512 + 256 + 128 + 64 + 16 + 1
+_#977_ => **key** = **512 + 256 + 128 + 64 + 16 + 1**
 
-| ○○●● | ●●○● | ○○○● |
+`| ○○●● | ●●○● | ○○○● |
+`
 
 This table divides the 12 points into three columns to make it easier to read.
 
