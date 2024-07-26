@@ -1,4 +1,4 @@
-export const bip39DotMap = `
+const bip39DotMap = `
 | Index | Word     | Column1 | Column2 | Column3 |
 |-------|----------|---------|---------|---------|
 | 1     | abandon  | ○○○○    | ○○○○    | ○○○●    |
@@ -2050,3 +2050,7 @@ export const bip39DotMap = `
 | 2047  | zone     | ○●●●    | ●●●●    | ●●●●    |
 | 2048  | zoo      | ●○○○    | ○○○○    | ○○○○    |
 `;
+
+module.exports = {
+    bip39DotMap
+}
