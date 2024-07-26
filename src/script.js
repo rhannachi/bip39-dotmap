@@ -1,28 +1,23 @@
 import { bip39DotMap } from './bip39_dotmap.js'
 
 const BIP39_DOTMAP = (function () {
-    // Split the input into rows
+    // Split the input into rows and remove any leading/trailing whitespace
     const rows = bip39DotMap.trim().split('\n');
+    // Skip the header and separator rows
+    const dataRows = rows.slice(2);
 
-    // Initialize an empty array to hold the result
-    const result = [];
-
-    // Loop through each row, starting from index 2 to skip header and separator
-    for (let i = 2; i < rows.length; i++) {
-        // Split each row into columns based on the pipe symbol
-        const columns = rows[i].split('|').map(col => col.trim()).filter(col => col);
-
-        // Extract data from columns
+    // Process each row to extract the relevant data
+    const result = dataRows.map(row => {
+        // Split the row into columns based on the pipe symbol and trim whitespace
+        const columns = row.split('|').map(col => col.trim()).filter(col => col);
+        // Ensure the row has the expected number of columns
         if (columns.length >= 5) {
-            const word = columns[1];
-            const col1 = columns[2];
-            const col2 = columns[3];
-            const col3 = columns[4];
-
-            // Push the formatted object to the result array
-            result.push({ word, col1, col2, col3 });
+            const [index, word, col1, col2, col3] = columns;
+            return { word, col1, col2, col3 };
         }
-    }
+        // Return null for rows that don't have the expected format
+        return null;
+    }).filter(item => item !== null); // Filter out any null entries
 
     return result;
 })();
@@ -32,30 +27,32 @@ document.addEventListener('DOMContentLoaded', function() {
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
     const wordInput = document.getElementById('word');
 
-    function getCheckboxState(column) {
-        let state = "";
-        for (let i = 1; i <= 4; i++) {
-            const checkbox = document.getElementById(`col${column}box${i}`);
-            state += checkbox.checked ? "●" : "○";
-        }
-        return state;
-    }
+    const getCheckboxState = column =>
+        Array.from({ length: 4 }, (_, i) => document.getElementById(`col${column}box${i + 1}`).checked ? "●" : "○").join("");
 
-    function updateWord() {
-        const col1State = getCheckboxState(1);
-        const col2State = getCheckboxState(2);
-        const col3State = getCheckboxState(3);
+    const setCheckboxState = (column, state) =>
+        state.split('').forEach((char, i) =>
+            document.getElementById(`col${column}box${i + 1}`).checked = char === "●");
 
+    const updateWord = () => {
+        const states = [1, 2, 3].map(getCheckboxState);
         const foundWord = BIP39_DOTMAP.find(
-            item => item.col1 === col1State && item.col2 === col2State && item.col3 === col3State
+            item => states.every((state, index) => item[`col${index + 1}`] === state)
         );
-
         wordInput.value = foundWord ? foundWord.word : "";
-    }
+    };
 
-    checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', updateWord);
-    });
+    const updateCheckboxes = () => {
+        const word = wordInput.value.toLowerCase();
+        const foundItem = BIP39_DOTMAP.find(item => item.word.toLowerCase() === word);
+
+        [1, 2, 3].forEach(column =>
+            setCheckboxState(column, foundItem ? foundItem[`col${column}`] : "○○○○")
+        );
+    };
+
+    checkboxes.forEach(checkbox => checkbox.addEventListener('change', updateWord));
+    wordInput.addEventListener('input', updateCheckboxes);
 
     updateWord();
 });
