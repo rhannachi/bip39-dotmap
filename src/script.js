@@ -1,4 +1,4 @@
-import { bip39DotMap } from './bip39_dotmap'
+import { bip39DotMap } from './bip39_dotmap.js'
 
 const BIP39_DOTMAP = (function () {
     // Split the input into rows
