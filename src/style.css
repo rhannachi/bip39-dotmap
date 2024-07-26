@@ -4,7 +4,7 @@ body {
     color: #fcbe24;
     padding: 0 24px;
     margin: 0;
-    height: 100vh;
+    height: 50vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -13,7 +13,7 @@ body {
   }
   
   h1 {
-    margin-bottom: 200px;
+    margin-bottom: 50px;
   }
   
   table {
