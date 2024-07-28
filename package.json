@@ -1,7 +1,7 @@
 {
-  "name": "bip39-dotmap",
+  "name": "bip39-obfuscator",
   "version": "1.0.0",
-  "description": "bip39-dotmap",
+  "description": "bip39-obfuscator",
   "main": "index.js",
   "scripts": {
     "dev": "npx http-server"

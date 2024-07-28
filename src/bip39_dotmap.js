@@ -1,3 +1,8 @@
+/**
+ * bip39-dotmap
+ * https://github.com/OneKeyHQ/bip39-dotmap
+ */
+
 export const bip39DotMap = `
 | Index | Word     | Column1 | Column2 | Column3 |
 |-------|----------|---------|---------|---------|
