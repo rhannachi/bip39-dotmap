@@ -41,7 +41,7 @@ function setupDotMap(dotMap) {
 
     const addEmptyCheckboxRow = () => {
         const seed = seedInput.value.toLowerCase().split(' ')
-        const wordIndex = seed?.length ?? 0
+        const wordIndex = seed?.length
         const wordContainer = document.createElement('tr');
         wordContainer.className = 'word-td';
         wordContainer.appendChild(createCheckboxGroup('○○○○', wordIndex, 1));
@@ -59,9 +59,9 @@ function setupDotMap(dotMap) {
             if (foundItem) {
                 const wordContainer = document.createElement('tr');
                 wordContainer.className = 'word-td';
-                wordContainer.appendChild(createCheckboxGroup(foundItem.col1, wordIndex, 1));
-                wordContainer.appendChild(createCheckboxGroup(foundItem.col2, wordIndex, 2));
-                wordContainer.appendChild(createCheckboxGroup(foundItem.col3, wordIndex, 3));
+                wordContainer.appendChild(createCheckboxGroup(foundItem.col1, wordIndex + 1, 1));
+                wordContainer.appendChild(createCheckboxGroup(foundItem.col2, wordIndex + 1, 2));
+                wordContainer.appendChild(createCheckboxGroup(foundItem.col3, wordIndex + 1, 3));
                 dotmapsContainer.appendChild(wordContainer);
             }
         });
@@ -76,7 +76,7 @@ function setupDotMap(dotMap) {
         wordContainers.forEach((wordContainer, wordIndex) => {
             const states = [1, 2, 3].map(columnIndex =>
                 Array.from({ length: 4 }, (_, i) =>
-                    document.getElementById(`word${wordIndex}col${columnIndex}box${i + 1}`).checked ? '●' : '○'
+                    document.getElementById(`word${wordIndex + 1}col${columnIndex}box${i + 1}`).checked ? '●' : '○'
                 ).join('')
             );
             const foundItem = dotMap.find(item =>
