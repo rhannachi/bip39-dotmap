@@ -3,12 +3,6 @@
 import { bip39DotMap } from './bip39_dotmap.js'
 import { BIP39Colors } from './script_bip39_colors.js'
 
-document.addEventListener('DOMContentLoaded', () => {
-    const BIP39_DOTMAP = parseDotMap(bip39DotMap);
-    setupDotMap(BIP39_DOTMAP);
-    setupColorHandling();
-});
-
 function parseDotMap(dotMap) {
     const rows = dotMap.trim().split('\n').slice(2);
     return rows.map(row => {
@@ -21,33 +15,82 @@ function parseDotMap(dotMap) {
     }).filter(item => item !== null);
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+    const BIP39_DOTMAP = parseDotMap(bip39DotMap);
+    setupDotMap(BIP39_DOTMAP);
+    setupColorHandling();
+});
+
 function setupDotMap(dotMap) {
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-    const wordInput = document.getElementById('word');
+    const seedInput = document.getElementById('seed_dotmap');
+    const dotmapsContainer = document.getElementById('dotmaps');
 
-    const getCheckboxState = column =>
-        Array.from({ length: 4 }, (_, i) => document.getElementById(`col${column}box${i + 1}`).checked ? "●" : "○").join("");
-
-    const setCheckboxState = (column, state) =>
-        state.split('').forEach((char, i) =>
-            document.getElementById(`col${column}box${i + 1}`).checked = char === "●");
-
-    const updateWord = () => {
-        const states = [1, 2, 3].map(getCheckboxState);
-        const foundWord = dotMap.find(item => states.every((state, index) => item[`col${index + 1}`] === state));
-        wordInput.value = foundWord ? foundWord.word : "";
+    const createCheckboxGroup = (columnStates, wordIndex, columnIndex) => {
+        const checkboxGroup = document.createElement('td');
+        checkboxGroup.className = 'td-checkbox-group';
+        columnStates.split('').forEach((state, i) => {
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.id = `word${wordIndex}col${columnIndex}box${i + 1}`;
+            checkbox.checked = state === '●';
+            checkbox.addEventListener('change', updateSeed);
+            checkboxGroup.appendChild(checkbox);
+        });
+        return checkboxGroup;
     };
 
-    const updateCheckboxes = () => {
-        const word = wordInput.value.toLowerCase();
-        const foundItem = dotMap.find(item => item.word.toLowerCase() === word);
-        [1, 2, 3].forEach(column => setCheckboxState(column, foundItem ? foundItem[`col${column}`] : "○○○○"));
+    const addEmptyCheckboxRow = () => {
+        const seed = seedInput.value.toLowerCase().split(' ')
+        const wordIndex = seed?.length ?? 0
+        const wordContainer = document.createElement('tr');
+        wordContainer.className = 'word-td';
+        wordContainer.appendChild(createCheckboxGroup('○○○○', wordIndex, 1));
+        wordContainer.appendChild(createCheckboxGroup('○○○○', wordIndex, 2));
+        wordContainer.appendChild(createCheckboxGroup('○○○○', wordIndex, 3));
+        dotmapsContainer.appendChild(wordContainer);
     };
 
-    checkboxes.forEach(checkbox => checkbox.addEventListener('change', updateWord));
-    wordInput.addEventListener('input', updateCheckboxes);
+    const updateDotmaps = () => {
+        const seed = seedInput.value.toLowerCase().split(' '); // Split the seed into individual words
+        dotmapsContainer.innerHTML = ''; // Clear previous dotmaps
 
-    updateWord();
+        seed.forEach((word, wordIndex) => {
+            const foundItem = dotMap.find(item => item.word.toLowerCase() === word);
+            if (foundItem) {
+                const wordContainer = document.createElement('tr');
+                wordContainer.className = 'word-td';
+                wordContainer.appendChild(createCheckboxGroup(foundItem.col1, wordIndex, 1));
+                wordContainer.appendChild(createCheckboxGroup(foundItem.col2, wordIndex, 2));
+                wordContainer.appendChild(createCheckboxGroup(foundItem.col3, wordIndex, 3));
+                dotmapsContainer.appendChild(wordContainer);
+            }
+        });
+
+        // Always add an empty row at the end
+        addEmptyCheckboxRow();
+    };
+
+    const updateSeed = () => {
+        const words = [];
+        const wordContainers = dotmapsContainer.querySelectorAll('.word-td');
+        wordContainers.forEach((wordContainer, wordIndex) => {
+            const states = [1, 2, 3].map(columnIndex =>
+                Array.from({ length: 4 }, (_, i) =>
+                    document.getElementById(`word${wordIndex}col${columnIndex}box${i + 1}`).checked ? '●' : '○'
+                ).join('')
+            );
+            const foundItem = dotMap.find(item =>
+                states.every((state, index) => item[`col${index + 1}`] === state)
+            );
+            if (foundItem) {
+                words.push(foundItem.word);
+            }
+        });
+        seedInput.value = words.join(' ');
+    };
+
+    seedInput.addEventListener('input', updateDotmaps);
+    updateDotmaps();
 }
 
 function setupColorHandling() {

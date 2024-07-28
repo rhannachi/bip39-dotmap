@@ -2,7 +2,7 @@ body {
     flex-direction: column;
     background: #15222E;
     color: #fcbe24;
-    padding: 0 24px;
+    padding: 0 24px 24px 24px ;
     margin: 0;
     display: flex;
     justify-content: center;
@@ -31,18 +31,14 @@ td {
     text-align: center;
     vertical-align: top;
 }
-.checkbox-group {
-    display: flex;
-    justify-content: space-around;
-}
-input#word {
-    font-weight: bold;
-    text-align: center;
-}
+/*.td-checkbox-group {*/
+/*    display: flex;*/
+/*    justify-content: space-around;*/
+/*}*/
 
-textarea#seed {
+textarea {
     font-weight: bold;
-    width: 100%;
+    width: 400px;
     height: 80px;
     box-sizing: border-box;
 }
