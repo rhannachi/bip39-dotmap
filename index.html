@@ -6,8 +6,9 @@
     <link rel="stylesheet" href="src/style.css" />
   </head>
   <body>
-    <h1>Bip39 Dotmap</h1>
+    <h1>Bip39 obfuscator</h1>
 
+    <h3>Bip39 Dotmap</h3>
     <table>
       <tr>
         <th>Column1</th>
@@ -46,6 +47,31 @@
       </tr>
     </table>
 
+    <h3>Bip39 Colors</h3>
+    <table>
+      <tr>
+        <th>Seed</th>
+        <th>Colors</th>
+      </tr>
+      <tr>
+        <td>
+          <div>
+            <textarea id="seed"></textarea>
+          </div>
+        </td>
+        <td id="colorCell">
+          <div id="colorContainer">
+            <div class="color-box">
+              <input class="color-input" type="text" placeholder="#000000">
+            </div>
+          </div>
+        </td>
+      </tr>
+    </table>
+
+    <span style="color: red" id="error"></span>
+
+    <script type="module" src="src/script_bip39_colors.js"></script>
     <script type="module" src="src/bip39_dotmap.js"></script>
     <script type="module" src="src/script.js"></script>
   </body>
